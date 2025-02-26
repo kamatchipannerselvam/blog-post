@@ -39,7 +39,7 @@ class Comment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('post_id, content, created_by, updated_by', 'required'),
+			array('post_id, content', 'required'),
 			array('post_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
 			array('created_at, updated_at', 'safe'),
 			// The following rule is used by search().
@@ -54,6 +54,7 @@ class Comment extends CActiveRecord
 	public function relations() {
         return array(
             'post' => array(self::BELONGS_TO, 'Post', 'post_id'),
+			'commentedby' => array(self::BELONGS_TO, 'User', 'created_by'),
         );
     }
 
@@ -65,7 +66,7 @@ class Comment extends CActiveRecord
 		return array(
 			'id' => 'Id',
 			'post_id' => 'Post',
-			'content' => 'Content',
+			'content' => 'Comment',
 			'created_at' => 'Created At',
 			'updated_at' => 'Updated At',
 			'created_by' => 'Created By',

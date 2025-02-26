@@ -7,6 +7,8 @@
  * @property integer $id
  * @property string $title
  * @property string $content
+ * @property string $visibility
+ * @property string $status;
  * @property string $created_at
  * @property string $updated_at
  * @property integer $created_by
@@ -14,6 +16,9 @@
  */
 class Post extends CActiveRecord
 {
+	public $comments;
+	public $likes;
+	public $visibility;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -26,7 +31,7 @@ class Post extends CActiveRecord
 
         if ($this->isNewRecord) {
             $this->created_at = new CDbExpression('NOW()');
-			$this->created_by = Yii::app()->user->id;
+			$this->created_by = Yii::app()->user->Id;
         }
         $this->updated_at = new CDbExpression('NOW()');
 		$this->updated_by = Yii::app()->user->id;
@@ -41,27 +46,35 @@ class Post extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, content, created_by, updated_by', 'required'),
+			array('title, content', 'required'),
 			array('created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('title', 'length', 'max'=>255),
+			array('title', 'length', 'max'=>35),
+			array('content', 'filter', 'filter' => array($obj=new CHtmlPurifier(),'purify')),
+			array('visibility, status', 'numerical'),
 			array('created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, title, content, created_at, updated_at, created_by, updated_by', 'safe', 'on'=>'search'),
+			array('id, title, content,visibility,status,created_at, updated_at, created_by, updated_by', 'safe', 'on'=>'search'),
 		);
 	}
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
+	public function relations() {
 		return array(
+			'author' => array(self::BELONGS_TO, 'User', 'created_by'),
+			'comment'=> array(self::HAS_MANY,'Comment','post_id'),
+			'likes'=> array(self::HAS_MANY,'Like','post_id')
 		);
 	}
-
+	public function getCommentCount() {
+		return Comment::model()->count('post_id=:post_id', array(':post_id' => $this->id));
+	}
+	public function getLikesCount() {
+		return Like::model()->count('post_id=:post_id', array(':post_id' => $this->id));
+	}
+	public function getStatusText() {
+		$status = ["1" => "Published", "0"=>'Un Published'];
+		return isset($status[$this->status]) ? $status[$this->status] : "Unknown";
+	}
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -71,10 +84,14 @@ class Post extends CActiveRecord
 			'id' => 'Id',
 			'title' => 'Title',
 			'content' => 'Content',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
+			'created_at' => 'Created Date',
+			'updated_at' => 'Updated Date',
 			'created_by' => 'Created By',
 			'updated_by' => 'Updated By',
+			'comments'=>'Comments (Nos)',
+			'likes'=>'Likes (Nos)',
+			'visibility'=>'Visibility',
+			'status'=>'Status'
 		);
 	}
 
@@ -112,6 +129,7 @@ class Post extends CActiveRecord
 
 		return new CActiveDataProvider('Post', array(
 			'criteria'=>$criteria,
+			'pagination' => array('pageSize' => 10),
 		));
 	}
 

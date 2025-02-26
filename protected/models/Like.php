@@ -24,10 +24,8 @@ class Like extends CActiveRecord
 
         if ($this->isNewRecord) {
             $this->created_at = new CDbExpression('NOW()');
-			$this->created_by = Yii::app()->user->id;
         }
         $this->updated_at = new CDbExpression('NOW()');
-		$this->updated_by = Yii::app()->user->id;
         return parent::beforeSave();
     }
 
