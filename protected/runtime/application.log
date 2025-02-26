@@ -73,3 +73,43 @@ Stack trace:
 REQUEST_URI=/simpleblog/index.php/site/signup
 HTTP_REFERER=http://localhost/simpleblog/index.php
 ---
+2025/02/26 10:00:01 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'createPost' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `AuthItem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data).
+in /opt/homebrew/var/www/simpleblog/protected/models/User.php (194)
+in /opt/homebrew/var/www/simpleblog/protected/controllers/SiteController.php (93)
+in /opt/homebrew/var/www/simpleblog/index.php (13)
+2025/02/26 10:00:01 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'createPost' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `AuthItem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data) in /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php(1278): CDbCommand->execute(Array)
+#1 /opt/homebrew/var/www/simpleblog/framework/web/auth/CDbAuthManager.php(443): CDbCommand->insert('AuthItem', Array)
+#2 /opt/homebrew/var/www/simpleblog/framework/web/auth/CAuthManager.php(100): CDbAuthManager->createAuthItem('createPost', 0, 'Create a blog p...', NULL, NULL)
+#3 /opt/homebrew/var/www/simpleblog/protected/models/User.php(194): CAuthManager->createOperation('createPost', 'Create a blog p...')
+#4 /opt/homebrew/var/www/simpleblog/protected/controllers/SiteController.php(93): User::UserAutherization('2')
+#5 [internal function]: SiteController->actionVerifyemail('727be8785f872c6...')
+#6 /opt/homebrew/var/www/simpleblog/framework/web/actions/CAction.php(114): ReflectionMethod->invokeArgs(Object(SiteController), Array)
+#7 /opt/homebrew/var/www/simpleblog/framework/web/actions/CInlineAction.php(47): CAction->runWithParamsInternal(Object(SiteController), Object(ReflectionMethod), Array)
+#8 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#9 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#10 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(282): CController->run('verifyemail')
+#12 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('site/verifyemai...')
+#13 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#14 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/simpleblog/index.php/site/verifyemail?token=727be8785f872c65e984e572aeacdd931fde2fa51bbb0619d3360a8bb2ff3963
+HTTP_REFERER=http://localhost/simpleblog/index.php/site/verifyemail?token=727be8785f872c65e984e572aeacdd931fde2fa51bbb0619d3360a8bb2ff3963
+---
+2025/02/26 10:01:05 [error] [php] Creating default object from empty value (/opt/homebrew/var/www/simpleblog/protected/controllers/SiteController.php:85)
+Stack trace:
+#0 unknown(0): SiteController->actionVerifyemail()
+#1 /opt/homebrew/var/www/simpleblog/framework/web/actions/CAction.php(114): ReflectionMethod->invokeArgs()
+#2 /opt/homebrew/var/www/simpleblog/framework/web/actions/CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#3 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(308): CInlineAction->runWithParams()
+#4 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(286): SiteController->runAction()
+#5 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#6 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(282): SiteController->run()
+#7 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#8 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#9 /opt/homebrew/var/www/simpleblog/index.php(13): CWebApplication->run()
+REQUEST_URI=/simpleblog/index.php/site/verifyemail?token=727be8785f872c65e984e572aeacdd931fde2fa51bbb0619d3360a8bb2ff3963
+in /opt/homebrew/var/www/simpleblog/protected/controllers/SiteController.php (85)
+in /opt/homebrew/var/www/simpleblog/index.php (13)

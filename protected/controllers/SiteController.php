@@ -8,11 +8,6 @@ class SiteController extends Controller
 	public function actions()
 	{
 		return array(
-			// captcha action renders the CAPTCHA image displayed on the contact page
-			'captcha'=>array(
-				'class'=>'CCaptchaAction',
-				'backColor'=>0xFFFFFF,
-			),
 			// page action renders "static" pages stored under 'protected/views/site/pages'
 			// They can be accessed via: index.php?r=site/page&view=FileName
 			'page'=>array(
@@ -27,8 +22,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('index');
 	}
 
@@ -49,27 +42,63 @@ class SiteController extends Controller
 	/**
 	 * Displays the contact page
 	 */
-	public function actionContact()
-	{
-		$model=new ContactForm;
-		if(isset($_POST['ContactForm']))
+	public function actionSignup()
+    {
+        $model = new SignupForm();
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='signup-form')
 		{
-			$model->attributes=$_POST['ContactForm'];
-			if($model->validate())
-			{
-				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-Type: text/plain; charset=UTF-8";
-
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-				$this->refresh();
-			}
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
 		}
-		$this->render('contact',array('model'=>$model));
+
+		// collect user input data
+		if(isset($_POST['SignupForm']))
+		{		
+				$user=new User();
+				$user->attributes=$_POST['SignupForm'];
+				$user->password_hash = password_hash($user->password, PASSWORD_DEFAULT);
+				if (!$user->save()) {
+					Yii::app()->user->setFlash('error', 'Please Enter valid Email');
+					$this->render('signup',array('model'=>$user));
+					Yii::app()->end();
+				}
+				Yii::app()->user->setFlash('success', 'Please verify your Email');
+				$this->redirect(array('site/verifyemail','token'=>$user->account_activation_token));
+			// validate user input and redirect to the previous page if valid
+		}
+		// display the login form
+		$this->render('signup',array('model'=>$model));
+    }
+	/***
+	 * Input $token string 
+	 */
+	public function actionVerifyemail($token){
+        $existingUser = User::model()->findByAttributes(array('account_activation_token' => $token));
+		if(isset($_POST['ajax']) && $_POST['ajax']==='verify-form'){
+			echo CActiveForm::validate($existingUser);
+			Yii::app()->end();
+		}
+		if(isset($_POST['User'])){
+			$verifycode=$_POST['User']['verify_code'];
+			$user = User::model()->findByAttributes(array('account_activation_token' => $token,'auth_key'=>$verifycode));
+			$user->status=user::STATUS_ACTIVE;
+			$user->auth_key=null;
+			$user->account_activation_token=null;
+			if(!$user->save()){
+				Yii::app()->user->setFlash('error', 'Not a valid user');
+				$this->redirect(array('site/login'));
+			}
+			//give permission to post blog
+			User::UserAutherization($user->id);
+			Yii::app()->user->setFlash('success', 'Your email verified, Please login here');
+			$this->redirect(array('site/login'));
+		}
+        if (!$existingUser) { // Exclude current user in case of update
+			Yii::app()->user->setFlash('error', 'This token is not valid');
+			$this->redirect(array('site/login'));
+        }
+		$this->render('verifyemail',array('model'=>$existingUser));
 	}
 
 	/**
@@ -77,8 +106,11 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-		$model=new LoginForm;
+		if (!Yii::app()->user->isGuest) {
+            return $this->redirect(Yii::app()->homeUrl);
+        }
 
+		$model=new LoginForm;
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{
@@ -90,9 +122,9 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
-			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
-				$this->redirect(Yii::app()->user->returnUrl);
+			if ($model->validate() && $model->login()) {
+				$this->redirect(Yii::app()->homeUrl); // Redirect to home after login
+			}
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));
