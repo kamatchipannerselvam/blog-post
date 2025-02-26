@@ -190,20 +190,20 @@ class User extends CActiveRecord
 
 	public static function UserAutherization($userId,$role='author'){
 		$auth = Yii::app()->authManager;
-		// Define operations
-		$auth->createOperation('createPost', 'Create a blog post');
-		$auth->createOperation('updatePost', 'Update any blog post');
-		$auth->createOperation('deletePost', 'Delete any blog post');
-		$auth->createOperation('manageOwnPost', 'Manage own blog post and post a comments');
+		// // Define operations
+		// $auth->createOperation('createPost', 'Create a blog post');
+		// $auth->createOperation('updatePost', 'Update any blog post');
+		// $auth->createOperation('deletePost', 'Delete any blog post');
+		// $auth->createOperation('manageOwnPost', 'Manage own blog post and post a comments');
 		
-		// Define roles and assign permissions
-		$roleAdmin = $auth->createRole('admin');
-		$roleAdmin->addChild('createPost');
-		$roleAdmin->addChild('updatePost');
-		$roleAdmin->addChild('deletePost');
+		// // Define roles and assign permissions
+		// $roleAdmin = $auth->createRole('admin');
+		// $roleAdmin->addChild('createPost');
+		// $roleAdmin->addChild('updatePost');
+		// $roleAdmin->addChild('deletePost');
 				
-		$roleAuthor = $auth->createRole('author');
-		$roleAuthor->addChild('manageOwnPost');
+		// $roleAuthor = $auth->createRole('author');
+		// $roleAuthor->addChild('manageOwnPost');
 		
 		// Assign roles to users
 		if($role==='admin'){

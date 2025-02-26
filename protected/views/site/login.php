@@ -1,53 +1,47 @@
 <?php
-/* @var $this SiteController */
-/* @var $model LoginForm */
-/* @var $form CActiveForm  */
-
 $this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Login',
-);
+$this->breadcrumbs=array('Login');
 ?>
+<div class="card p-4">
+<h5 class="card-title text-center">Login</h5>
+<div class="container overflow-hidden">
+  <div class="row gx-5">
+    <div class="col">
+		<div class="p-3">
+			<div class="form">
+				<?php $form=$this->beginWidget('CActiveForm', array(
+					'id'=>'login-form',
+					'enableClientValidation'=>true,
+					'clientOptions'=>array(
+						'validateOnSubmit'=>true,
+					),
+					'htmlOptions' => array('autocomplete' => 'off')
+				)); ?>
+				<?php echo $form->errorSummary($model); ?>    
+				<div class="form-group p-3">
+					<?php echo $form->labelEx($model,'email'); ?>
+					<?php echo $form->textField($model,'email',array('class'=>"form-control",'autocomplete' => 'off')); ?>
+					<?php echo $form->error($model,'email',array('class'=>'text-danger')); ?>
+				</div>
+				<div class="form-group p-3">
+					<?php echo $form->labelEx($model,'password'); ?>
+					<?php echo $form->passwordField($model,'password',array('class'=>"form-control",'autocomplete' => 'off')); ?>
+					<?php echo $form->error($model,'password',array('class'=>'text-danger')); ?>
+				</div>
 
-<h1>Login</h1>
+				<div class="input-group p-3">
+					<?php echo $form->checkBox($model,'rememberMe'); ?>
+					<?php echo $form->label($model,'rememberMe', array('class'=>'px-2')); ?>
+					<?php echo $form->error($model,'rememberMe'); ?>
+				</div>
 
-<p>Please fill out the following form with your login credentials:</p>
+				<div class="row">
+					<?php echo CHtml::submitButton('Login',array('class'=>'btn btn-primary')); ?>
+				</div>
 
-<div class="form">
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'login-form',
-	'enableClientValidation'=>true,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
-)); ?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
-		<p class="hint">
-			Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.
-		</p>
-	</div>
-
-	<div class="row rememberMe">
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->label($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
+			<?php $this->endWidget(); ?>
+		</div>
+    </div>
+  </div>
+</div>
 </div><!-- form -->
