@@ -38,7 +38,7 @@
             <?php echo $form->error($model, 'password_repeat',array('class'=>'text-danger')); ?>
         </div>
         <div class="col-md-12 text-center">
-        <?php echo CHtml::submitButton('Signup'); ?>
+        <?php echo CHtml::submitButton('Signup', array('class'=>'btn btn-primary')); ?>
         </div>
     </div>  
     <?php $this->endWidget(); ?>

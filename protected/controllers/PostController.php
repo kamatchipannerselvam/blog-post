@@ -2,14 +2,75 @@
 
 class PostController extends Controller
 {
-    public $layout = '//layouts/admin';
-	public function actionIndex() {
-        $posts = Post::model()->findAll();
-        $this->render('index', array('posts' => $posts));
-    }
+    /**
+	 * @var CActiveRecord the currently loaded data model instance.
+	 */
+	private $_model;
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+		);
+	}
 
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view','like'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update','like','view'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('@'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
+
+	/**
+	 * Lists all models.
+	 */
+	public function actionIndex()
+	{
+		$model = new Post('search'); // Use 'search' scenario
+		$model->unsetAttributes(); // Clear default values
+	
+		if (isset($_GET['Post'])) {
+			$model->attributes = $_GET['Post']; // Assign filter values
+		}
+	
+		$dataProvider = new CActiveDataProvider('Post', array(
+			'pagination' => array('pageSize' => 10),
+		));
+	
+		$this->render('index', array(
+			'model' => $model,
+			'dataProvider' => $dataProvider,
+		));		
+	}
+    
     public function actionCreate() {
         $model = new Post();
+        if(isset($_POST['ajax']) && $_POST['ajax']==='post-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
         if (isset($_POST['Post'])) {
             $model->attributes = $_POST['Post'];
             if ($model->save()) {
@@ -21,7 +82,15 @@ class PostController extends Controller
 
     public function actionUpdate($id) {
         $model = Post::model()->findByPk($id);
+        if(!Yii::app()->user->checkAccess("admin") && $model->created_by !== Yii::app()->user->id) {
+            throw new CHttpException(403, 'You are not allowed to edit this post.');
+        }
         if (!$model) throw new CHttpException(404, 'Post not found');
+        if(isset($_POST['ajax']) && $_POST['ajax']==='post-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
         
         if (isset($_POST['Post'])) {
             $model->attributes = $_POST['Post'];
@@ -34,7 +103,18 @@ class PostController extends Controller
 
     public function actionDelete($id) {
         $model = Post::model()->findByPk($id);
-        if ($model) $model->delete();
+        if(!Yii::app()->user->checkAccess("admin") && $model->created_by !== Yii::app()->user->id) {
+            throw new CHttpException(403, 'You are not allowed to edit this post.');
+        }
+        if ($model) {
+            // Delete all related comments and likes using correct relations
+            Comment::model()->deleteAll('post_id=:post_id', array(':post_id' => $model->id));
+            Like::model()->deleteAll('post_id=:post_id', array(':post_id' => $model->id));
+        
+            // Finally, delete the post
+            $model->delete();
+        }
+        
         $this->redirect(array('index'));
     }
 
@@ -43,6 +123,12 @@ class PostController extends Controller
         if (!$post) throw new CHttpException(404, 'Post not found');
 
         $comment = new Comment();
+        if(isset($_POST['ajax']) && $_POST['ajax']==='post-form')
+		{
+			echo CActiveForm::validate($comment);
+			Yii::app()->end();
+		}
+
         if (isset($_POST['Comment'])) {
             $comment->attributes = $_POST['Comment'];
             $comment->post_id = $id;
@@ -80,36 +166,4 @@ class PostController extends Controller
 
         $this->redirect(array('view', 'id' => $id));
 	}
-	// public function actionIndex()
-	// {
-	// 	$this->render('index');
-	// }
-
-	// -----------------------------------------------------------
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 }

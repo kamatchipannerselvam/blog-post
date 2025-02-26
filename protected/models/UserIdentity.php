@@ -1,14 +1,11 @@
 <?php
-/***
- * 
- */
 class UserIdentity extends CUserIdentity
 {
-    
+	public $info;
     public function authenticate()
 	{
 		$existingUser = User::model()->findByAttributes(array('email' => $this->username));
-		$storedHash = $existingUser->password_hash; // Replace with stored hash
+		$storedHash = $existingUser?$existingUser->password_hash:null; // Replace with stored hash
 
 		if(!$existingUser){
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
@@ -20,4 +17,10 @@ class UserIdentity extends CUserIdentity
 		}
 		return !$this->errorCode;
 	}
+
+	public function getId() {
+		$user=User::model()->findByAttributes(array('email'=>$this->username));
+		return $user?$user->id:0;
+    }
+	
 }
