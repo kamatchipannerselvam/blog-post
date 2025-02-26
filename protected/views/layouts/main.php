@@ -4,56 +4,53 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="language" content="en">
-
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection">
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print">
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection">
-	<![endif]-->
-
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/themes/classic/views/css/styles.css" rel="stylesheet" />
+	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
+<body class="d-flex flex-column h-100">
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html"><span class="fw-bolder text-primary"><?php echo CHtml::encode(Yii::app()->name); ?></span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                            <li class="nav-item"><?php echo CHtml::link('Home', array('site/index'),array('class'=>'nav-link')); ?></li>
+							<?php if(Yii::app()->user->isGuest){ ?>
+                            <li class="nav-item"><?php echo CHtml::link('Login', array('site/login'),array('class'=>'nav-link')); ?></li>
+                            <li class="nav-item"><?php echo CHtml::link('signup', array('site/signup'),array('class'=>'nav-link')); ?></li>
+							<?php } else {?>
+								<li class="nav-item"><?php echo CHtml::link('Dashboard', array('post/index'),array('class'=>'nav-link')); ?></li>
+								<li class="nav-item"><?php echo CHtml::link('Logout', array('site/logout'),array('class'=>'nav-link')); ?></li>
+							<?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <section class="bg-light py-5">
+                <div class="container px-5">
+					<div id="content" class="container-sm">
+					<?php if(Yii::app()->user->hasFlash('success')): ?>
+							<div class="alert alert-success">
+								<?php echo Yii::app()->user->getFlash('success'); ?>
+							</div>
+						<?php endif; ?>
 
-<body>
-
-<div class="container" id="page">
-
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
-
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
-
-	<?php echo $content; ?>
-
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
-
+						<?php if(Yii::app()->user->hasFlash('error')): ?>
+							<div class="alert alert-danger">
+								<?php echo Yii::app()->user->getFlash('error'); ?>
+							</div>
+						<?php endif; ?>						
+						<?php echo $content; ?>
+					</div>
+				</div>
+			</section>
+		<footer class="bg-white py-4 mt-auto">
+		<?php $this->renderPartial('/layouts/_footer'); ?>
+		</footer>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/themes/classic/views/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
