@@ -15,6 +15,9 @@
 </div>
     <div class="col-sm-12">
         <h2>Add a Comment:</h2>
+        <?php if(Yii::app()->user->isGuest) {
+            echo '<p> '.CHtml::link('Login', array('site/login'),array('class'=>'nav-link')).'to post a comment</p>';
+        } else{ ?>
             <?php
                 $form=$this->beginWidget('CActiveForm', array(
                 'id'=>'post-form',
@@ -42,6 +45,7 @@
                 <?php echo CHtml::submitButton('Signup', array('class'=>'btn btn-primary')); ?>
             </div>
             <?php $this->endWidget(); ?>
+            <?php } ?>
 </div>
 </div>
 
