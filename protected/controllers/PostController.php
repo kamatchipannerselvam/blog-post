@@ -25,7 +25,7 @@ class PostController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('view','like'),
+				'actions'=>array('view','like','realTimePosts'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -166,4 +166,20 @@ class PostController extends Controller
 
         $this->redirect(array('view', 'id' => $id));
 	}
+    public function actionRealTimePosts()
+    {
+        $criteria = new CDbCriteria();
+        $criteria->join = "JOIN comments c ON t.id = c.post_id"; // Ensure at least 1 comment
+        $criteria->condition = "(
+            SELECT COUNT(*) FROM posts WHERE created_by = t.created_by
+        ) >= 2"; // Ensure author has at least 2 posts
+        $criteria->group = "t.id";
+        $criteria->order = "t.created_at DESC"; // Order by latest
+
+        $posts = Post::model()->findAll($criteria);
+
+        // Render JSON response for AJAX
+        echo CJSON::encode($posts);
+        Yii::app()->end();
+    }
 }

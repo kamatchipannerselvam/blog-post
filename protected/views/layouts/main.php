@@ -19,6 +19,7 @@
 						<?php echo $this->userinfo?$this->userinfo->username:null ?>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                             <li class="nav-item"><?php echo CHtml::link('Home', array('site/index'),array('class'=>'nav-link')); ?></li>
+                            <li class="nav-item"><?php echo CHtml::link('Live', array('/live-posts'),array('class'=>'nav-link')); ?></li>
 							<?php if(Yii::app()->user->isGuest){ ?>
                             <li class="nav-item"><?php echo CHtml::link('Login', array('site/login'),array('class'=>'nav-link')); ?></li>
                             <li class="nav-item"><?php echo CHtml::link('signup', array('site/signup'),array('class'=>'nav-link')); ?></li>
