@@ -1,30 +1,45 @@
 # blog-post
 Simple Blog POST using yii v1.1
 Backend Assignment v1.0
-Create a simple CRUD Blog web application.
-For backend MUST use: Yii v1.1 and MySQL
-For frontend use native HTML, CSS, JavaScript, Bootstrap/Tailwind or any preferred frontend framework(e.g. React.js)
-Summary: This Yii application will securely handle user authentication, including user sign in, sign up and verify user email(not need to send real emails, just generate a token and use it).
-
-Task Requirements:
-
-Authentication: Secure user authentication processes, such as signin, signup and the verify user email logic.
-
-Ajax Validation: Real-time email validation during registration to ensure the email is not already in use.
-
-CRUD Operations: Verified Users can perform Create, Read, Update, and Delete (CRUD) operations on blog posts, associated with their unique user ID. (non-verified users won't be able to CRUD blog posts)
-
-Form Validation: Use multiple fields and implement validation rules.
-
-Blog Post Visibility: Users can mark their posts as public or private.
-
-Likes: Users can like blog posts.
-
-Search and Filter: Users can search for blog posts by title or description and filter results by date and author.
-
-Bonus points: Create a new branch from your main base branch and:
-
-Implement a new feature in this new branch which is "Create new public webpage that shows in real-time(without refresh page) a list of blog posts that have at least 1 comment and their authors have at least 2 blogs" (optimize the SQL query)
-Create a PR from this new branch and merge it into -> your main base branch
-Write a small document(e.g. readme file) about how to setup and run your code
-Task Submission: Create a private repo on GitHub and share the repo with khaledalam.net@gmail.com
+step 1:  Clone the Source Code from gitrepo url: https://github.com/kamatchipannerselvam/blog-post.git
+cd /var/www/html  # or your actual public path
+git clone https://github.com/kamatchipannerselvam/blog-post.git blog-post
+Step 2: Move and Unzip Files
+unzip blog-post.zip -d /var/www/html/blog-post
+sudo chmod -R 755 /var/www/html/blog-post
+sudo chown -R www-data:www-data /var/www/html/blog-post
+step 3: Ensure system configuration with PHP 7.4 & MySQL 5.7 (or MariaDB), Since yii1.0 only support upto php 7.4 and mysql 5.7
+step 4: create db yii1db 
+    a. Login into mysql: mysql -u root -p
+    b. create db and give permissions to the databaseuser
+        CREATE DATABASE yii1db;
+        GRANT ALL PRIVILEGES ON yii1db.* TO 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+        FLUSH PRIVILEGES;
+        EXIT;
+step 5: Update Database Configuration 
+    Edit protected/config/database.php:
+    return array(
+        'connectionString' => 'mysql:host=localhost;dbname=yii1db',
+        'emulatePrepare' => true,
+        'username' => 'your_db_user',
+        'password' => 'your_db_password',
+        'charset' => 'utf8',
+    );
+step 6: Import SQL (Optional for Sample Data)
+    mysql -u your_db_user -p yii1db < /var/www/html/blog-post/database.sql
+        or
+    cd /var/www/html/blog-post/protected
+    php yiic migrate up 
+step 7: Initiate RBAC rules for authentications
+     cd /var/www/html/blog-post/protected
+     php yiic rbac init
+Step 7: Setup Permissions for Yii 
+    chmod -R 777 /var/www/html/blog-post/protected/runtime
+    chmod -R 777 /var/www/html/blog-post/assets
+Step 8: Start the Web Server
+    http://yourdomain.com/blog-post
+Step 9: Sign Up as a New User
+    1. Visit /signup
+    2. Register a new account
+    3. The system will automatically assign the "author" role.
+🎉 Done! Yii 1 Blog is Now Live! 🚀

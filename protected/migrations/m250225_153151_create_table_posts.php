@@ -8,6 +8,8 @@ class m250225_153151_create_table_posts extends CDbMigration
 			id INT AUTO_INCREMENT PRIMARY KEY,
 			title VARCHAR(255) NOT NULL,
 			content TEXT NOT NULL,
+			visibility INT NOT NULL,
+			`status` INT NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			created_by INT NOT NULL,

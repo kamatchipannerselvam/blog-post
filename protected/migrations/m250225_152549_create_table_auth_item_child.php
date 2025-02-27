@@ -4,7 +4,7 @@ class m250225_152549_create_table_auth_item_child extends CDbMigration
 {
 		public function up() {
         $db = Yii::app()->db;
-        $sql = "CREATE TABLE `auth_item_child` (
+        $sql = "CREATE TABLE `authitemchild` (
 				`parent` VARCHAR(64),
 				`child` VARCHAR(64),
 				PRIMARY KEY(`parent`, `child`)
@@ -15,7 +15,7 @@ class m250225_152549_create_table_auth_item_child extends CDbMigration
 
 		public function down() {
 			$db = Yii::app()->db;
-			$db->createCommand("DROP TABLE IF EXISTS auth_item_child;")->execute();
+			$db->createCommand("DROP TABLE IF EXISTS authitemchild;")->execute();
 			echo "❌ User table deleted.\n";
 		}
 

@@ -4,7 +4,7 @@ class m250225_152601_create_table_auth_assignment extends CDbMigration
 {
 		public function up() {
         $db = Yii::app()->db;
-        $sql = "CREATE TABLE `auth_assignment` (
+        $sql = "CREATE TABLE `authassignment` (
 				`itemname` VARCHAR(64),
 				`userid` INT(11),
 				`bizrule` TEXT,
@@ -17,7 +17,7 @@ class m250225_152601_create_table_auth_assignment extends CDbMigration
 
 		public function down() {
 			$db = Yii::app()->db;
-			$db->createCommand("DROP TABLE IF EXISTS auth_assignment;")->execute();
+			$db->createCommand("DROP TABLE IF EXISTS authassignment;")->execute();
 			echo "❌ User table deleted.\n";
 		}
 

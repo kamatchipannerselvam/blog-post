@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col-md-12 text-center mt-3">
-                <?php echo CHtml::submitButton('Signup', array('class'=>'btn btn-primary')); ?>
+                <?php echo CHtml::submitButton('Update', array('class'=>'btn btn-primary')); ?>
             </div>
             <?php $this->endWidget(); ?>
             <?php } ?>

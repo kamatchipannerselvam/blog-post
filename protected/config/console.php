@@ -24,6 +24,14 @@ return array(
 				),
 			),
 		),
+		'authManager' => array(
+            'class' => 'CDbAuthManager', // Use CPhpAuthManager if you prefer file-based RBAC
+            'connectionID' => 'db',  // Ensure it matches the database connection
+            'itemTable' => 'authitem',
+            'assignmentTable' => 'authassignment',
+            'itemChildTable' => 'authitemchild',
+        ),
+
 
 	),
 );

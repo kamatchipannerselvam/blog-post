@@ -1,11 +1,119 @@
-2025/02/27 07:14:41 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "live-posts". in /opt/homebrew/var/www/simpleblog/framework/web/CController.php:486
+2025/02/27 08:14:07 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.tbl_migration' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `tbl_migration`.
+2025/02/27 08:14:21 [error] [exception.CException] CException: Property "CConsoleApplication.authManager" is not defined. in /opt/homebrew/var/www/simpleblog/framework/base/CComponent.php:130
 Stack trace:
-#0 /opt/homebrew/var/www/simpleblog/framework/web/CController.php(270): CController->missingAction('live-posts')
-#1 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(282): CController->run('live-posts')
-#2 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('site/live-posts')
-#3 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
-#4 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
-#5 {main}
-REQUEST_URI=/simpleblog/index.php/site/live-posts
-HTTP_REFERER=http://localhost/simpleblog/live-posts
+#0 /opt/homebrew/var/www/simpleblog/framework/base/CModule.php(105): CComponent->__get('authManager')
+#1 /opt/homebrew/var/www/simpleblog/protected/commands/RbacCommand.php(6): CModule->__get('authManager')
+#2 [internal function]: RbacCommand->actionInit()
+#3 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommand.php(177): ReflectionMethod->invokeArgs(Object(RbacCommand), Array)
+#4 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#5 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#6 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CConsoleApplication->processRequest()
+#7 /opt/homebrew/var/www/simpleblog/framework/yiic.php(33): CApplication->run()
+#8 /opt/homebrew/var/www/simpleblog/protected/yiic.php(7): require_once('/opt/homebrew/v...')
+#9 /opt/homebrew/var/www/simpleblog/protected/yiic(4): require_once('/opt/homebrew/v...')
+#10 {main}
+---
+2025/02/27 08:21:03 [error] [system.db.CDbCommand] CDbCommand::fetch() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.authitem' doesn't exist. The SQL statement executed was: SELECT *
+FROM `authitem`
+WHERE name=:name.
+2025/02/27 08:21:03 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.authitem' doesn't exist. The SQL statement executed was: SELECT *
+FROM `authitem`
+WHERE name=:name in /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php(415): CDbCommand->queryInternal('fetch', Array, Array)
+#1 /opt/homebrew/var/www/simpleblog/framework/web/auth/CDbAuthManager.php(485): CDbCommand->queryRow()
+#2 /opt/homebrew/var/www/simpleblog/protected/commands/RbacCommand.php(8): CDbAuthManager->getAuthItem('admin')
+#3 [internal function]: RbacCommand->actionInit()
+#4 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommand.php(177): ReflectionMethod->invokeArgs(Object(RbacCommand), Array)
+#5 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#6 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#7 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CConsoleApplication->processRequest()
+#8 /opt/homebrew/var/www/simpleblog/framework/yiic.php(33): CApplication->run()
+#9 /opt/homebrew/var/www/simpleblog/protected/yiic.php(7): require_once('/opt/homebrew/v...')
+#10 /opt/homebrew/var/www/simpleblog/protected/yiic(4): require_once('/opt/homebrew/v...')
+#11 {main}
+---
+2025/02/27 08:21:08 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.tbl_migration' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `tbl_migration`.
+2025/02/27 08:21:14 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `authitem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data).
+2025/02/27 08:21:14 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `authitem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data) in /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php(1278): CDbCommand->execute(Array)
+#1 /opt/homebrew/var/www/simpleblog/framework/web/auth/CDbAuthManager.php(443): CDbCommand->insert('authitem', Array)
+#2 /opt/homebrew/var/www/simpleblog/framework/web/auth/CAuthManager.php(72): CDbAuthManager->createAuthItem('admin', 2, '', NULL, NULL)
+#3 /opt/homebrew/var/www/simpleblog/protected/commands/RbacCommand.php(24): CAuthManager->createRole('admin')
+#4 [internal function]: RbacCommand->actionInit()
+#5 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommand.php(177): ReflectionMethod->invokeArgs(Object(RbacCommand), Array)
+#6 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#7 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#8 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CConsoleApplication->processRequest()
+#9 /opt/homebrew/var/www/simpleblog/framework/yiic.php(33): CApplication->run()
+#10 /opt/homebrew/var/www/simpleblog/protected/yiic.php(7): require_once('/opt/homebrew/v...')
+#11 /opt/homebrew/var/www/simpleblog/protected/yiic(4): require_once('/opt/homebrew/v...')
+#12 {main}
+---
+2025/02/27 08:21:48 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.tbl_migration' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `tbl_migration`.
+2025/02/27 08:21:54 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `authitem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data).
+2025/02/27 08:21:54 [error] [exception.CDbException] CDbException: CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'authitem.PRIMARY'. The SQL statement executed was: INSERT INTO `authitem` (`name`, `type`, `description`, `bizrule`, `data`) VALUES (:name, :type, :description, :bizrule, :data) in /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/db/CDbCommand.php(1278): CDbCommand->execute(Array)
+#1 /opt/homebrew/var/www/simpleblog/framework/web/auth/CDbAuthManager.php(443): CDbCommand->insert('authitem', Array)
+#2 /opt/homebrew/var/www/simpleblog/framework/web/auth/CAuthManager.php(72): CDbAuthManager->createAuthItem('admin', 2, '', NULL, NULL)
+#3 /opt/homebrew/var/www/simpleblog/protected/commands/RbacCommand.php(24): CAuthManager->createRole('admin')
+#4 [internal function]: RbacCommand->actionInit()
+#5 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommand.php(177): ReflectionMethod->invokeArgs(Object(RbacCommand), Array)
+#6 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#7 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#8 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CConsoleApplication->processRequest()
+#9 /opt/homebrew/var/www/simpleblog/framework/yiic.php(33): CApplication->run()
+#10 /opt/homebrew/var/www/simpleblog/protected/yiic.php(7): require_once('/opt/homebrew/v...')
+#11 /opt/homebrew/var/www/simpleblog/protected/yiic(4): require_once('/opt/homebrew/v...')
+#12 {main}
+---
+2025/02/27 08:23:32 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.tbl_migration' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `tbl_migration`.
+2025/02/27 08:23:36 [error] [exception.CException] CException: Either "admin" or "updatePost" does not exist. in /opt/homebrew/var/www/simpleblog/framework/web/auth/CDbAuthManager.php:170
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/web/auth/CAuthItem.php(193): CDbAuthManager->addItemChild('admin', 'updatePost')
+#1 /opt/homebrew/var/www/simpleblog/protected/commands/RbacCommand.php(22): CAuthItem->addChild('updatePost')
+#2 [internal function]: RbacCommand->actionInit()
+#3 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommand.php(177): ReflectionMethod->invokeArgs(Object(RbacCommand), Array)
+#4 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#5 /opt/homebrew/var/www/simpleblog/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#6 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CConsoleApplication->processRequest()
+#7 /opt/homebrew/var/www/simpleblog/framework/yiic.php(33): CApplication->run()
+#8 /opt/homebrew/var/www/simpleblog/protected/yiic.php(7): require_once('/opt/homebrew/v...')
+#9 /opt/homebrew/var/www/simpleblog/protected/yiic(4): require_once('/opt/homebrew/v...')
+#10 {main}
+---
+2025/02/27 08:26:29 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'yii1db.tbl_migration' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `tbl_migration`.
+2025/02/27 08:30:40 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "assets/3a6d7770/contents.css". in /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('assets/3a6d7770...')
+#1 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#2 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/simpleblog/assets/3a6d7770/contents.css
+---
+2025/02/27 08:31:36 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "assets/3a6d7770/contents.css". in /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('assets/3a6d7770...')
+#1 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#2 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/simpleblog/assets/3a6d7770/contents.css
+---
+2025/02/27 08:32:07 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "assets/3a6d7770/contents.css". in /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('assets/3a6d7770...')
+#1 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#2 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/simpleblog/assets/3a6d7770/contents.css
+---
+2025/02/27 08:33:59 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "assets/3a6d7770/contents.css". in /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /opt/homebrew/var/www/simpleblog/framework/web/CWebApplication.php(141): CWebApplication->runController('assets/3a6d7770...')
+#1 /opt/homebrew/var/www/simpleblog/framework/base/CApplication.php(185): CWebApplication->processRequest()
+#2 /opt/homebrew/var/www/simpleblog/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/simpleblog/assets/3a6d7770/contents.css
 ---

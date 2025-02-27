@@ -62,10 +62,12 @@ $config = [
             'class' => 'CFileCache',  // Use file-based caching
         ),
 		'authManager' => array(
-			'class' => 'CDbAuthManager',
-			'connectionID' => 'db',
-			'defaultRoles' => array('guest'),
-		),
+            'class' => 'CDbAuthManager', // Use CPhpAuthManager if you prefer file-based RBAC
+            'connectionID' => 'db',  // Ensure it matches the database connection
+            'itemTable' => 'authitem',
+            'assignmentTable' => 'authassignment',
+            'itemChildTable' => 'authitemchild',
+        ),
 	),
 	'modules'=>array(
 		/*
